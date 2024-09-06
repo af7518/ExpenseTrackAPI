@@ -63,25 +63,26 @@ namespace ExpenseTrackAPI.Controllers
             }
         }
 
+
         // GET: api/ExpenseTrack/GetExpenses
         [HttpGet("GetExpenses")]
         public IActionResult GetExpenses()
         {
             try
             {
-                var expenses = _context.Expenses.Include(e => e.CategoryId).ToList();
-                if (expenses == null || !expenses.Any())
-                {
-                    return NotFound("No expenses found.");
-                }
+                var expenses = _context.Expenses.Where(e => e.Deleted == false).ToList();
 
+                // If no expenses are found, return an empty list
                 return Ok(expenses);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                // Log and handle general exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred: " + ex.Message);
             }
         }
+
+
 
         // GET: api/ExpenseTrack/GetExpensesByCategory/{categoryId}
         [HttpGet("GetExpensesByCategory/{categoryId}")]
