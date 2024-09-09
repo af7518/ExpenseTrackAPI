@@ -66,27 +66,27 @@ namespace ExpenseTrackAPI.Controllers
 
         // GET: api/ExpenseTrack/GetExpenses
         [HttpGet("GetExpenses")]
-        public IActionResult GetExpenses()
+        public async Task<IActionResult> GetExpenses()
         {
             try
             {
                 var expenses = _context.Expenses.Where(e => e.Deleted == false).ToList();
-
-                // If no expenses are found, return an empty list
                 return Ok(expenses);
             }
             catch (Exception ex)
             {
-                // Log and handle general exceptions
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred: " + ex.Message);
+                // Log the exception and return a server error response
+                // Log exception (implement logging as per your setup)
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
         }
 
 
 
+
         // GET: api/ExpenseTrack/GetExpensesByCategory/{categoryId}
         [HttpGet("GetExpensesByCategory/{categoryId}")]
-        public IActionResult GetExpensesByCategory(int categoryId)
+        public async Task<IActionResult> GetExpensesByCategory(int categoryId)
         {
             try
             {
